@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="twkg.dao.CoverSongDao">
+	<insert id="insert">
+		insert into coverSong(userId,songId,singTime,coverPlayCount) 
+		values(#{coverSong.userId},#{coverSong.songId},#{coverSong.singTime},#{coverSong.coverPlayCount})
+	</insert>
+	
+	<delete id="delete">
+		delete from coverSong where coverSongId = #{coverSongId}
+	</delete>
+	
+	<update id="update">
+		update coverSong set 
+		userId = #{coverSong.userId},
+		songId = #{coverSong.songId},
+		singTime = #{coverSong.singTime},
+		coverPlayCount = #{coverSong.coverPlayCount} 
+		where coverSongId = #{coverSong.coverSongId}
+	</update>
+	
+	<select id="findCoverSongByUserId" resultType="twkg.entity.CoverSong">
+		select * from coverSong where userId = #{userId}
+	</select>
+	
+	<select id="findCoverSongBySongNameAndSingerName" resultType="twkg.entity.CoverSong">
+		select c.* from coverSong c,song s 
+		where c.songId = s.songId 
+		and (s.songName like CONCAT(CONCAT('%', #{searchContent}), '%') 
+		or s.singerName like CONCAT(CONCAT('%', #{searchContent}), '%')) 
+		limit #{startIndex},#{n}
+	</select>
+	
+	<select id="findCoverSongCountBySongNameAndSingerName" resultType="int">
+		select count(1) from coverSong c,song s 
+		where c.songId = s.songId 
+		and (s.songName like CONCAT(CONCAT('%', #{searchContent}), '%') 
+		or s.singerName like CONCAT(CONCAT('%', #{searchContent}), '%'))
+	</select>
+	
+	<select id="findCoverSongByCoverSongId" resultType="twkg.entity.CoverSong">
+		select * from coverSong where coverSongId = #{coverSongId}
+	</select>
+	
+	<select id="findLastCoverSong" resultType="twkg.entity.CoverSong">
+		select * from coverSong 
+		where coverSongId = 
+		(select max(coverSongId) from coverSong where userId = #{userId} and songId = #{songId})
+	</select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="twkg.dao.CookieDao">
+	<insert id="insert" parameterType="twkg.entity.Cookie">
+		insert into cookie(userId,cookieValue,cookieTime,isAutoLogin)
+		values(#{cookie.userId},#{cookie.cookieValue},#{cookie.cookieTime},#{cookie.isAutoLogin})
+	</insert>
+	
+	<delete id="delete">
+		delete from cookie where cookieId = #{cookieId}
+	</delete>
+	
+	<update id="update">
+		update cookie set 
+		userId = #{cookie.userId},
+		cookieValue = #{cookie.cookieValue},
+		cookieTime = #{cookie.cookieTime},
+		isAutoLogin = #{cookie.isAutoLogin} 
+		where cookieId = #{cookie.cookieId}
+	</update>
+	
+	<select id="findCookieByCookieValue" resultType="twkg.entity.Cookie">
+		select * from cookie where cookieValue = #{cookieValue}
+	</select>
+</mapper>

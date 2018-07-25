@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="twkg.dao.UserDao">
+	<insert id="insert">
+		insert into user
+		(userName,userKey,isAdmin,userEmail,userBirth,userGender,userRealName,userBio,userPopularity,registerTime) 
+		values(#{user.userName},#{user.userKey},#{user.isAdmin},#{user.userEmail},#{user.userBirth},
+		#{user.userGender},#{user.userRealName},#{user.userBio},#{user.userPopularity},#{user.registerTime})
+	</insert>
+	
+	<delete id="delete">
+		delete from user where userId = #{userId}
+	</delete>
+	
+	<update id="update">
+		update user set 
+		userName = #{user.userName},
+		userKey = #{user.userKey},
+		isAdmin = #{user.isAdmin},
+		userEmail = #{user.userEmail},
+		userBirth = #{user.userBirth},
+		userGender = #{user.userGender},
+		userRealName = #{user.userRealName},
+		userBio = #{user.userBio},
+		userPopularity = #{user.userPopularity},
+		registerTime = #{user.registerTime} 
+		where userId = #{user.userId}
+	</update>
+	
+	<select id="findUserByUserId" resultType="twkg.entity.User">
+		select * from user where userId = #{userId}
+	</select>
+	
+	<select id="findMostPopularUser" resultType="twkg.entity.User">
+		select * from user order by userPopularity desc limit 0,#{n}
+	</select>
+	
+	<select id="findUserByUserNameAndUserRealName" resultType="twkg.entity.User">
+		select * from user 
+		where userName like CONCAT(CONCAT('%', #{searchContent}), '%') 
+		or userRealName like CONCAT(CONCAT('%', #{searchContent}), '%') 
+		limit #{startIndex},#{n}
+	</select>
+	
+	<select id="findUserCountByUserNameAndUserRealName" resultType="int">
+		select count(1) from user 
+		where userName like CONCAT(CONCAT('%', #{searchContent}), '%') 
+		or userRealName like CONCAT(CONCAT('%', #{searchContent}), '%')
+	</select>
+	
+	<select id="findUserByUserName" resultType="twkg.entity.User">
+		select * from user where userName = #{userName}
+	</select>
+	
+	<select id="findUserByUserEmail" resultType="twkg.entity.User">
+		select * from user where userEmail = #{userEmail}
+	</select>
+</mapper>
